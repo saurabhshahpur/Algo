@@ -84,6 +84,30 @@ class BackTracking:
 
         return False
 
+    def check_array(self, n, k, arr, i):
+        return 0 <= i < n and 0 <= arr[i] <= k
+
+    def print_subset_arr(self, n, arr):
+        for i in range(0, n):
+            if arr[i] < 0:
+                print -1*arr[i],
+        print "\n"
+
+    def subset_sum(self, n, k, arr):
+        if k == 0:
+            print "subset found"
+            self.print_subset_arr(n, arr)
+            return True
+
+        for i in range(0, n):
+            if self.check_array(n, k, arr, i):
+                arr[i] *= -1
+                if self.subset_sum(n, k+arr[i], arr):
+                    return True
+                else:
+                    arr[i] *= -1
+        return False
+
 
 sol = []
 for i in range(0, 8):
@@ -108,7 +132,10 @@ for i in range(0, 20):
         temp.append(-1)
     queen.append(temp)
 
-print time.time()
-bk.n_queen_problem(20, 0, 0, queen)
-print time.time()
+# print time.time()
+# bk.n_queen_problem(20, 0, 0, queen)
+# print time.time()
+
+arr = [10, 7, 5, 18, 12, 20, 15]
+bk.subset_sum(7, 24, arr)
 
