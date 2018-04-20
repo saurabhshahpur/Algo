@@ -108,6 +108,58 @@ class BackTracking:
                     arr[i] *= -1
         return False
 
+    def print_sudoku(self, matrix):
+        for i in range(0, 9):
+            for j in range(0, 9):
+                print matrix[i][j],
+            print ""
+
+    def get_empty_cell(self, matrix, point):
+        for i in range(0, 9):
+            for j in range(0, 9):
+                if not matrix[i][j]:
+                    point[0] = i
+                    point[1] = j
+                    return True
+        return False
+
+    def check_sudoku_pos(self, matrix, x, y, key):
+        if 0 <= x < 9 and 0 <= y < 9:
+            # check horizontal
+            for i in range(0, 9):
+                if matrix[x][i] == key:
+                    return False
+            # check vertical
+            for i in range(0, 9):
+                if matrix[i][y] == key:
+                    return False
+            # check square
+            x_mod = x - x % 3
+            y_mod = y - y % 3
+            for i in range(0, 3):
+                for j in range(0, 3):
+                    if matrix[i + x_mod][j + y_mod] == key:
+                        return False
+
+            return True
+
+        return False
+
+    def sudoku(self, matrix):
+        point = [0, 0]
+
+        if not self.get_empty_cell(matrix, point):
+            self.print_sudoku(matrix)
+            return True
+        for i in range(1, 10):
+            if self.check_sudoku_pos(matrix, point[0], point[1], i):
+                matrix[point[0]][point[1]] = i
+                if self.sudoku(matrix):
+                    return True
+                else:
+                    matrix[point[0]][point[1]] = 0
+        return False
+
 
 sol = []
 for i in range(0, 8):
@@ -139,3 +191,15 @@ for i in range(0, 20):
 arr = [10, 7, 5, 18, 12, 20, 15]
 bk.subset_sum(7, 24, arr)
 
+
+grid = [[3, 0, 6, 5, 0, 8, 4, 0, 0],
+                      [5, 2, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 8, 7, 0, 0, 0, 0, 3, 1],
+                      [0, 0, 3, 0, 1, 0, 0, 8, 0],
+                      [9, 0, 0, 8, 6, 3, 0, 0, 5],
+                      [0, 5, 0, 0, 9, 0, 6, 0, 0],
+                      [1, 3, 0, 0, 0, 0, 2, 5, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 7, 4],
+                      [0, 0, 5, 2, 0, 6, 3, 0, 0]]
+
+bk.sudoku(grid)
